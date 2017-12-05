@@ -1,4 +1,4 @@
-package reflecthelper
+package gohelper
 
 import (
     "reflect"
