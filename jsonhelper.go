@@ -137,3 +137,20 @@ func ParseValueInt(opt string, key1 string, key2 string) int32 {
 	return ret1
 }
 
+
+
+func ParseValueBool(opt string, key1 string, key2 string) bool {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+		}
+	}()
+
+	v := make(map[string]interface{})
+	json.Unmarshal([]byte(opt), &v)
+	ret1 := Json2Bool(v[key1])
+	if ret1 == false {
+		return Json2Bool(v[key2])
+	}
+	return ret1
+}
