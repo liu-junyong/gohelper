@@ -1,4 +1,4 @@
-package sig  
+package gohelper  
    
 import (  
     "fmt"  
