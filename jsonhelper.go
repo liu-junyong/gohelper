@@ -154,3 +154,44 @@ func ParseValueBool(opt string, key1 string, key2 string) bool {
 	}
 	return ret1
 }
+
+
+
+
+func ToSlice(arr interface{}) []interface{} {
+	v := reflect.ValueOf(arr)
+	if v.Kind() != reflect.Slice {
+		panic("toslice arr not slice")
+	}
+	l := v.Len()
+	ret := make([]interface{}, l)
+	for i := 0; i < l; i++ {
+		ret[i] = v.Index(i).Interface()
+	}
+	return ret
+}
+
+
+func Json2slice(hh interface{}) []int32 {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+		}
+	}()
+
+	ret := make([]int32,0)
+	if hh == nil {
+		return ret
+	}
+
+	ret1 := ToSlice(hh)
+	for _,v := range ret1  {
+		k := Json2int( v )
+		if k > 0 {
+			ret = append( ret ,k )
+		}
+	}
+
+	return ret
+
+}
