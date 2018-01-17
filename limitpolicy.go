@@ -36,6 +36,19 @@ var g_IPLimit	*LimitPolicy
 func (this *LimitPolicy) Init(){
 	this.AccessLimit = make([]int,0)
 	this.AccessMap = make(map[int]int)
+	go this.timer()
+}
+
+
+
+func (this *LimitPolicy)timer() {
+	timer1 := time.NewTicker(6 * time.Second)
+	for {
+		select {
+		case <-timer1.C:
+			go this.UpdateAccess()
+		}
+	}
 }
 
 
