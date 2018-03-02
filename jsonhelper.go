@@ -160,6 +160,12 @@ func ParseValueBool(opt string, key1 string, key2 string) bool {
 
 
 func ToSlice(arr interface{}) []interface{} {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+		}
+	}()
+
 	v := reflect.ValueOf(arr)
 	if v.Kind() != reflect.Slice {
 		panic("toslice arr not slice")
@@ -170,6 +176,29 @@ func ToSlice(arr interface{}) []interface{} {
 		ret[i] = v.Index(i).Interface()
 	}
 	return ret
+}
+
+
+func Json2sliceStr(hh interface{}) []string {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+		}
+	}()
+
+	ret := make([]string,0)
+	if hh == nil {
+		return ret
+	}
+
+	ret1 := ToSlice(hh)
+	for _,v := range ret1  {
+		k := Json2String( v )
+		ret = append( ret ,k )
+	}
+
+	return ret
+
 }
 
 
