@@ -179,6 +179,37 @@ func ToSlice(arr interface{}) []interface{} {
 }
 
 
+
+func Json2sliceObj(hh interface{}) []interface{} {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+		}
+	}()
+
+	ret := make([]interface{},0)
+	if hh == nil {
+		return ret
+	}
+
+	v := reflect.ValueOf(hh)
+	if v.Kind() != reflect.Slice {
+		return ret
+	}
+
+	ret1 := ToSlice(hh)
+	for _,v := range ret1  {
+		k := Json2String( v )
+		ret = append( ret ,k )
+	}
+
+	return ret
+
+}
+
+
+
+
 func Json2sliceStr(hh interface{}) []string {
 	defer func() {
 		if r := recover(); r != nil {
