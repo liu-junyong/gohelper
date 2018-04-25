@@ -83,6 +83,9 @@ func Json2Bool(hh interface{}) bool {
 	switch hh.(type) {
 	case bool:
 		heifan = hh.(bool)
+	case string:
+		v := hh.(string)
+		return v == "true"
 	}
 	return heifan
 }
