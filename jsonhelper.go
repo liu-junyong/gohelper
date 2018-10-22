@@ -108,11 +108,14 @@ func Json2String(hh interface{}) string {
 	}
 
 	heifan := ""
+
 	switch hh.(type) {
 	case string:
 		heifan = hh.(string)
 	case float64:
 		heifan = strconv.Itoa(int(hh.(float64)))
+	case int:
+		heifan = strconv.Itoa(hh.(int))
 	}
 	return heifan
 }
@@ -203,16 +206,7 @@ func Json2sliceObj(hh interface{}) []interface{} {
 	}
 
 	v := reflect.ValueOf(hh)
-	if v.Kind() != reflect.Slice {
-		return ret
-	}
-
-	if hh!=""{
-		v := reflect.ValueOf(hh)
-		if v.Kind() != reflect.Slice {
-			return ret
-		}
-
+	if v.Kind() == reflect.Slice {
 		ret1 := ToSlice(hh)
 		for _,v := range ret1  {
 			k := Json2String( v )
@@ -239,11 +233,15 @@ func Json2sliceStr(hh interface{}) []string {
 		return ret
 	}
 
-	ret1 := ToSlice(hh)
-	for _,v := range ret1  {
-		k := Json2String( v )
-		ret = append( ret ,k )
+	v := reflect.ValueOf(hh)
+	if v.Kind() == reflect.Slice {
+		ret1 := ToSlice(hh)
+		for _,v := range ret1  {
+			k := Json2String( v )
+			ret = append( ret ,k )
+		}
 	}
+
 
 	return ret
 
@@ -263,14 +261,17 @@ func Json2slice(hh interface{}) []int32 {
 		return ret
 	}
 
-	ret1 := ToSlice(hh)
-	for _,v := range ret1  {
-		k := Json2int( v )
-		if k > 0 {
-			ret = append( ret ,k )
+	v := reflect.ValueOf(hh)
+	if v.Kind() == reflect.Slice {
+		ret1 := ToSlice(hh)
+		for _,v := range ret1  {
+			k := Json2int( v )
+			if k > 0 {
+				ret = append( ret ,k )
+			}
 		}
 	}
 
-	return ret
 
+	return ret
 }
