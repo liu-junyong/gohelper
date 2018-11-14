@@ -105,6 +105,8 @@ func Json2String(hh interface{}) string {
 	switch hh.(type) {
 	case string:
 		heifan = hh.(string)
+	case float64:
+		heifan = strconv.Itoa(int(hh.(float64)))
 	}
 	return heifan
 }
