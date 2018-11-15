@@ -72,7 +72,7 @@ func Count(card int32, Cards ...int32) int32 {
 
 //func Count_if(Cards ...int32,func(i, j int) bool { return nums[i] < nums[j] }) int32 {
 //func Count_if(Cards ...int32,func(i int) bool { return nums[i] < nums[j] }) int32 {
-func Count_if(cards *[]int32, compare func(int32) bool) int32 {
+func Count_if(cards *[]int32, compare func(int) bool) int32 {
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
