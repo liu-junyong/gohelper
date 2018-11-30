@@ -88,6 +88,39 @@ func Count_if(cards *[]int32, compare func(int) bool) int32 {
 	return ret
 }
 
+
+func Find_first_if(cards *[]int32, compare func(int) bool) int {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+		}
+	}()
+
+	for i := range *cards {
+		if compare(i) {
+			return i
+		}
+	}
+	return -1
+}
+
+
+func Find_last_if(cards *[]int32, compare func(int) bool) int {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+		}
+	}()
+
+	lens := len(*cards)
+	for i := range *cards {
+		if compare(lens-i) {
+			return lens-i
+		}
+	}
+	return -1
+}
+
 func Most(nums ...int32) (int32, int32) {
 	mostct := int32(0)
 	mostval := int32(0)
