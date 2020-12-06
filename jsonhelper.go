@@ -5,13 +5,16 @@ import (
 	"encoding/json"
 	"strconv"
 	"reflect"
+	"fmt"
+	"runtime/debug"
 )
 
 
 func Json2int(hh interface{}) int32 {
 	defer func() {
-		if r := recover(); r != nil {
-			logger.Error(r)
+		if err := recover(); err != nil {
+			logger.Error(fmt.Sprintf("CacheError, err:%v ", err))
+			logger.Error(string(debug.Stack()))
 		}
 	}()
 
@@ -41,8 +44,9 @@ func Json2int(hh interface{}) int32 {
 
 func Json2float32(hh interface{}) float32 {
 	defer func() {
-		if r := recover(); r != nil {
-			logger.Error(r)
+		if err := recover(); err != nil {
+			logger.Error(fmt.Sprintf("CacheError, err:%v ", err))
+			logger.Error(string(debug.Stack()))
 		}
 	}()
 
@@ -70,8 +74,9 @@ func Json2float32(hh interface{}) float32 {
 
 func Json2Bool(hh interface{}) bool {
 	defer func() {
-		if r := recover(); r != nil {
-			logger.Error(r)
+		if err := recover(); err != nil {
+			logger.Error(fmt.Sprintf("CacheError, err:%v ", err))
+			logger.Error(string(debug.Stack()))
 		}
 	}()
 
@@ -92,8 +97,9 @@ func Json2Bool(hh interface{}) bool {
 
 func Json2String(hh interface{}) string {
 	defer func() {
-		if r := recover(); r != nil {
-			logger.Error(r)
+		if err := recover(); err != nil {
+			logger.Error(fmt.Sprintf("CacheError, err:%v ", err))
+			logger.Error(string(debug.Stack()))
 		}
 	}()
 
@@ -102,19 +108,25 @@ func Json2String(hh interface{}) string {
 	}
 
 	heifan := ""
+
 	switch hh.(type) {
 	case string:
 		heifan = hh.(string)
 	case float64:
 		heifan = strconv.Itoa(int(hh.(float64)))
+	case int:
+		heifan = strconv.Itoa(hh.(int))
+	case int32:
+		heifan = strconv.Itoa(int(hh.(int32)))
 	}
 	return heifan
 }
 
 func ParseValue(opt string, key1 string,key2 string) string {
 	defer func() {
-		if r := recover(); r != nil {
-			logger.Error(r)
+		if err := recover(); err != nil {
+			logger.Error(fmt.Sprintf("CacheError, err:%v ", err))
+			logger.Error(string(debug.Stack()))
 		}
 	}()
 
@@ -129,8 +141,9 @@ func ParseValue(opt string, key1 string,key2 string) string {
 
 func ParseValueInt(opt string, key1 string, key2 string) int32 {
 	defer func() {
-		if r := recover(); r != nil {
-			logger.Error(r)
+		if err := recover(); err != nil {
+			logger.Error(fmt.Sprintf("CacheError, err:%v ", err))
+			logger.Error(string(debug.Stack()))
 		}
 	}()
 
@@ -147,8 +160,9 @@ func ParseValueInt(opt string, key1 string, key2 string) int32 {
 
 func ParseValueBool(opt string, key1 string, key2 string) bool {
 	defer func() {
-		if r := recover(); r != nil {
-			logger.Error(r)
+		if err := recover(); err != nil {
+			logger.Error(fmt.Sprintf("CacheError, err:%v ", err))
+			logger.Error(string(debug.Stack()))
 		}
 	}()
 
@@ -161,13 +175,10 @@ func ParseValueBool(opt string, key1 string, key2 string) bool {
 	return ret1
 }
 
-
-
-
 func ToSlice(arr interface{}) []interface{} {
 	defer func() {
-		if r := recover(); r != nil {
-			logger.Error(r)
+		if err := recover(); err != nil {
+			logger.Error(err)
 		}
 	}()
 
@@ -183,12 +194,11 @@ func ToSlice(arr interface{}) []interface{} {
 	return ret
 }
 
-
-
 func Json2sliceObj(hh interface{}) []interface{} {
 	defer func() {
-		if r := recover(); r != nil {
-			logger.Error(r)
+		if err := recover(); err != nil {
+			logger.Error(fmt.Sprintf("CacheError, err:%v ", err))
+			logger.Error(string(debug.Stack()))
 		}
 	}()
 
@@ -198,18 +208,15 @@ func Json2sliceObj(hh interface{}) []interface{} {
 	}
 
 	v := reflect.ValueOf(hh)
-	if v.Kind() != reflect.Slice {
-		return ret
-	}
-
-	ret1 := ToSlice(hh)
-	for _,v := range ret1  {
-		k := Json2String( v )
-		ret = append( ret ,k )
+	if v.Kind() == reflect.Slice {
+		ret1 := ToSlice(hh)
+		for _,v := range ret1  {
+			k := Json2String( v )
+			ret = append( ret ,k )
+		}
 	}
 
 	return ret
-
 }
 
 
@@ -217,8 +224,9 @@ func Json2sliceObj(hh interface{}) []interface{} {
 
 func Json2sliceStr(hh interface{}) []string {
 	defer func() {
-		if r := recover(); r != nil {
-			logger.Error(r)
+		if err := recover(); err != nil {
+			logger.Error(fmt.Sprintf("CacheError, err:%v ", err))
+			logger.Error(string(debug.Stack()))
 		}
 	}()
 
@@ -227,11 +235,15 @@ func Json2sliceStr(hh interface{}) []string {
 		return ret
 	}
 
-	ret1 := ToSlice(hh)
-	for _,v := range ret1  {
-		k := Json2String( v )
-		ret = append( ret ,k )
+	v := reflect.ValueOf(hh)
+	if v.Kind() == reflect.Slice {
+		ret1 := ToSlice(hh)
+		for _,v := range ret1  {
+			k := Json2String( v )
+			ret = append( ret ,k )
+		}
 	}
+
 
 	return ret
 
@@ -240,8 +252,9 @@ func Json2sliceStr(hh interface{}) []string {
 
 func Json2slice(hh interface{}) []int32 {
 	defer func() {
-		if r := recover(); r != nil {
-			logger.Error(r)
+		if err := recover(); err != nil {
+			logger.Error(fmt.Sprintf("CacheError, err:%v ", err))
+			logger.Error(string(debug.Stack()))
 		}
 	}()
 
@@ -250,14 +263,17 @@ func Json2slice(hh interface{}) []int32 {
 		return ret
 	}
 
-	ret1 := ToSlice(hh)
-	for _,v := range ret1  {
-		k := Json2int( v )
-		if k > 0 {
-			ret = append( ret ,k )
+	v := reflect.ValueOf(hh)
+	if v.Kind() == reflect.Slice {
+		ret1 := ToSlice(hh)
+		for _,v := range ret1  {
+			k := Json2int( v )
+			if k > 0 {
+				ret = append( ret ,k )
+			}
 		}
 	}
 
-	return ret
 
+	return ret
 }
